@@ -16,3 +16,7 @@ func (*ServiceConfig) DeploymentService() *services.DeploymentService {
 func (*ServiceConfig) CommonService() *services.CommonService {
 	return services.NewCommonService()
 }
+
+func (*ServiceConfig) PodService() *services.PodService {
+	return services.NewPodService()
+}

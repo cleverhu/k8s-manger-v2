@@ -15,6 +15,8 @@ var k8sClientInitOnce sync.Once
 
 type K8sConfig struct {
 	DepHandler *core.DepHandler `inject:"-"`
+	PodHandler *core.PodHandler `inject:"-"`
+	RSHandler  *core.RSHandler  `inject:"-"`
 }
 
 func NewK8sConfig() *K8sConfig {
@@ -38,6 +40,13 @@ func (this *K8sConfig) Informer() informers.SharedInformerFactory {
 	factory := informers.NewSharedInformerFactory(this.K8sClient(), 0)
 	depInformer := factory.Apps().V1().Deployments().Informer()
 	depInformer.AddEventHandler(this.DepHandler)
+
+	podInformer := factory.Core().V1().Pods().Informer()
+	podInformer.AddEventHandler(this.PodHandler)
+
+	rsInformer := factory.Apps().V1().ReplicaSets().Informer()
+	rsInformer.AddEventHandler(this.RSHandler)
+
 	factory.Start(wait.NeverStop)
 	return factory
 }

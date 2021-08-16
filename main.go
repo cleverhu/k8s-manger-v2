@@ -14,6 +14,6 @@ func main() {
 			configs.NewK8sMaps(),
 			configs.NewServiceConfig(),
 		).
-		Mount("", controllers.NewUserCtl()).
+		Mount("", controllers.NewDeploymentCtl()).
 		Launch()
 }

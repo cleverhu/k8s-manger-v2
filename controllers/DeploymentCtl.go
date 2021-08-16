@@ -12,7 +12,7 @@ type DeploymentCtl struct {
 	DepService *services.DeploymentService `inject:"-"`
 }
 
-func NewUserCtl() *DeploymentCtl {
+func NewDeploymentCtl() *DeploymentCtl {
 	return &DeploymentCtl{}
 }
 
@@ -24,6 +24,11 @@ func (this *DeploymentCtl) ListAll(c *gin.Context) goft.Json {
 	return this.DepService.ListAll("default")
 }
 
+func (this *DeploymentCtl) Detail(c *gin.Context) goft.Json {
+	return this.DepService.Detail("default", "ngx1")
+}
+
 func (this *DeploymentCtl) Build(goft *goft.Goft) {
-	goft.Handle("GET", "/", this.ListAll)
+	goft.Handle("GET", "/", this.ListAll).
+		Handle("GET", "/detail", this.Detail)
 }

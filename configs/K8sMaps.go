@@ -12,3 +12,11 @@ func NewK8sMaps() *K8sMaps {
 func (*K8sMaps) DeploymentMap() *core.DeploymentMap {
 	return &core.DeploymentMap{}
 }
+
+func (*K8sMaps) PodMap() *core.PodMap {
+	return &core.PodMap{}
+}
+
+func (*K8sMaps) RSMap() *core.RSMap {
+	return &core.RSMap{}
+}
