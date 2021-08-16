@@ -1,4 +1,4 @@
-package core
+package services
 
 import (
 	"fmt"
@@ -7,7 +7,8 @@ import (
 )
 
 type PodMap struct {
-	data sync.Map //key ns value []*corev1.Pod
+	CommonService *CommonService `inject:"-"`
+	data          sync.Map       //key ns value []*corev1.Pod
 }
 
 func (this *PodMap) Add(pod *corev1.Pod) {
@@ -66,7 +67,7 @@ func (this *PodMap) ListByRsLabelsAndNS(ns string, rsLabels []map[string]string)
 	ret := make([]*corev1.Pod, 0)
 	for _, pod := range pods {
 		for _, rLabel := range rsLabels {
-			if IsValidLabel(pod.Labels, rLabel) {
+			if this.CommonService.IsValidLabel(pod.Labels, rLabel) {
 				ret = append(ret, pod)
 			}
 		}

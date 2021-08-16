@@ -2,14 +2,14 @@ package services
 
 import (
 	"github.com/shenyisyn/goft-gin/goft"
-	"k8s-manger-v2/core"
 	"k8s-manger-v2/models"
+	v1 "k8s.io/api/apps/v1"
 )
 
 type DeploymentService struct {
-	CommonService *CommonService      `inject:"-"`
-	DepMap        *core.DeploymentMap `inject:"-"`
-	PodService    *PodService         `inject:"-"`
+	CommonService *CommonService `inject:"-"`
+	DepMap        *DeploymentMap `inject:"-"`
+	PodService    *PodService    `inject:"-"`
 }
 
 func NewDeploymentService() *DeploymentService {
@@ -22,10 +22,14 @@ func (this *DeploymentService) ListAll(namespace string) []*models.Deployment {
 	goft.Error(err)
 	for _, dep := range deps {
 		tmp := &models.Deployment{
-			NameSpace: dep.Namespace,
-			Name:      dep.Name,
-			Replicas:  [3]int32{dep.Status.Replicas, dep.Status.AvailableReplicas, dep.Status.UnavailableReplicas},
-			Images:    this.CommonService.GetImagesByDep(*dep),
+			NameSpace:  dep.Namespace,
+			Name:       dep.Name,
+			Replicas:   [3]int32{dep.Status.Replicas, dep.Status.AvailableReplicas, dep.Status.UnavailableReplicas},
+			Images:     this.CommonService.GetImagesByDep(*dep),
+			CreateTime: this.CommonService.TimeFormat(dep.CreationTimestamp.Time),
+			//Pods: this.PodService.GetPodsByDep(*dep),
+			IsComplete: this.getDeploymentIsComplete(dep),
+			Message:    this.getDeploymentCondition(dep),
 		}
 		ret = append(ret, tmp)
 	}
@@ -43,4 +47,17 @@ func (this *DeploymentService) Detail(namespace string, name string) *models.Dep
 		Pods:       this.PodService.GetPodsByDep(*deploy),
 		Replicas:   [3]int32{deploy.Status.Replicas, deploy.Status.AvailableReplicas, deploy.Status.UnavailableReplicas},
 	}
+}
+
+func (*DeploymentService) getDeploymentCondition(dep *v1.Deployment) string {
+	for _, item := range dep.Status.Conditions {
+		if string(item.Type) == "Available" && string(item.Status) != "True" {
+			return item.Message
+		}
+	}
+	return ""
+}
+
+func (*DeploymentService) getDeploymentIsComplete(dep *v1.Deployment) bool {
+	return dep.Status.Replicas == dep.Status.AvailableReplicas
 }

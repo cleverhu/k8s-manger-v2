@@ -1,4 +1,4 @@
-package core
+package services
 
 import (
 	"errors"
@@ -53,6 +53,7 @@ func (this *RSMap) ListByNS(ns string) ([]*v1.ReplicaSet, error) {
 	if list, ok := this.data.Load(ns); ok {
 		return list.([]*v1.ReplicaSet), nil
 	}
+	fmt.Println("im here")
 	return nil, errors.New("rs record not found")
 }
 

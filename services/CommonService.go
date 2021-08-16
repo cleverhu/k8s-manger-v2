@@ -29,3 +29,13 @@ func (this *CommonService) GetImagesByPod(containers []corev1.Container) string 
 func (this *CommonService) TimeFormat(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }
+
+func (this *CommonService) IsValidLabel(m1, m2 map[string]string) bool {
+	for key := range m2 {
+		if m2[key] != m1[key] {
+			return false
+		}
+	}
+
+	return true
+}

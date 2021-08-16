@@ -2,15 +2,14 @@ package services
 
 import (
 	"github.com/shenyisyn/goft-gin/goft"
-	"k8s-manger-v2/core"
 	"k8s-manger-v2/models"
 	v1 "k8s.io/api/apps/v1"
 )
 
 type PodService struct {
-	PodMap        *core.PodMap   `inject:"-"`
+	PodMap        *PodMap        `inject:"-"`
 	CommonService *CommonService `inject:"-"`
-	RSMap         *core.RSMap    `inject:"-"`
+	RSMap         *RSMap         `inject:"-"`
 }
 
 func NewPodService() *PodService {

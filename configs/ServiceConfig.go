@@ -20,3 +20,7 @@ func (*ServiceConfig) CommonService() *services.CommonService {
 func (*ServiceConfig) PodService() *services.PodService {
 	return services.NewPodService()
 }
+
+func (*ServiceConfig) NSService() *services.NSService {
+	return services.NewNSService()
+}

@@ -21,7 +21,8 @@ func (*DeploymentCtl) Name() string {
 }
 
 func (this *DeploymentCtl) ListAll(c *gin.Context) goft.Json {
-	return this.DepService.ListAll("default")
+	//return "hello"
+	return gin.H{"code": 20000, "data": this.DepService.ListAll(c.Query("namespace"))}
 }
 
 func (this *DeploymentCtl) Detail(c *gin.Context) goft.Json {
@@ -29,6 +30,6 @@ func (this *DeploymentCtl) Detail(c *gin.Context) goft.Json {
 }
 
 func (this *DeploymentCtl) Build(goft *goft.Goft) {
-	goft.Handle("GET", "/", this.ListAll).
+	goft.Handle("GET", "/deployments", this.ListAll).
 		Handle("GET", "/detail", this.Detail)
 }
