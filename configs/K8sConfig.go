@@ -20,6 +20,7 @@ type K8sConfig struct {
 	NSHandler      *services.NSHandler      `inject:"-"`
 	EventHandler   *services.EventHandler   `inject:"-"`
 	IngressHandler *services.IngressHandler `inject:"-"`
+	ServiceHandler *services.ServiceHandler `inject:"-"`
 }
 
 func NewK8sConfig() *K8sConfig {
@@ -58,6 +59,9 @@ func (this *K8sConfig) Informer() informers.SharedInformerFactory {
 
 	ingressInformer := factory.Networking().V1beta1().Ingresses().Informer()
 	ingressInformer.AddEventHandler(this.IngressHandler)
+
+	serviceInformer := factory.Core().V1().Services().Informer()
+	serviceInformer.AddEventHandler(this.ServiceHandler)
 
 	factory.Start(wait.NeverStop)
 	return factory

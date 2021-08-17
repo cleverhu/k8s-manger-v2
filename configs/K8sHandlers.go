@@ -34,3 +34,7 @@ func (*K8sHandlers) EventHandler() *services.EventHandler {
 func (*K8sHandlers) IngressHandler() *services.IngressHandler {
 	return &services.IngressHandler{}
 }
+
+func (*K8sHandlers) ServiceHandler() *services.ServiceHandler {
+	return &services.ServiceHandler{}
+}

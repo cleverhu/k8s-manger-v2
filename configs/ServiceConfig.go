@@ -28,3 +28,7 @@ func (*ServiceConfig) NSService() *services.NSService {
 func (*ServiceConfig) IngressService() *services.IngressService {
 	return services.NewIngressService()
 }
+
+func (*ServiceConfig) ServiceService() *services.ServiceService {
+	return services.NewServiceService()
+}

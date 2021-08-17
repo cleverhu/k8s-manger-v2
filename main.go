@@ -39,6 +39,7 @@ func main() {
 			controllers.NewWsCtl(),
 			controllers.NewNSCtl(),
 			controllers.NewIngressCtl(),
+			controllers.NewServiceCtl(),
 		).
 		Attach(
 		//middlewares.NewCorsMiddleware()

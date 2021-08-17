@@ -34,3 +34,7 @@ func (*K8sMaps) EventMap() *services.EventMap {
 func (*K8sMaps) IngressMap() *services.IngressMap {
 	return &services.IngressMap{}
 }
+
+func (*K8sMaps) ServiceMap() *services.ServiceMap {
+	return &services.ServiceMap{}
+}
