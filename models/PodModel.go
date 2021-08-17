@@ -5,7 +5,7 @@ type Pod struct {
 	NameSpace  string
 	Images     string
 	NodeName   string
-	IsReady    string
+	IsReady    bool
 	Message    string
 	CreateTime string
 	IPs        []string //第一个是pod ip,第二个是host ip

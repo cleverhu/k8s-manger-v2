@@ -26,3 +26,11 @@ func (*K8sMaps) RSMap() *services.RSMap {
 func (*K8sMaps) NSMap() *services.NSMap {
 	return &services.NSMap{}
 }
+
+func (*K8sMaps) EventMap() *services.EventMap {
+	return &services.EventMap{}
+}
+
+func (*K8sMaps) IngressMap() *services.IngressMap {
+	return &services.IngressMap{}
+}

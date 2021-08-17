@@ -47,12 +47,12 @@ func (this *PodMap) Update(pod *corev1.Pod) error {
 			}
 		}
 	}
-
 	return fmt.Errorf("pod-%s not found", pod.Name)
 }
 
 func (this *PodMap) ListByNS(ns string) ([]*corev1.Pod, error) {
-	if ns != "" {
+
+	if ns != "all-namespaces" {
 		if list, ok := this.data.Load(ns); ok {
 			return list.([]*corev1.Pod), nil
 		}
@@ -73,7 +73,9 @@ func (this *PodMap) ListByNS(ns string) ([]*corev1.Pod, error) {
 		})
 		return ret, nil
 	}
-	return nil, fmt.Errorf("pods not found")
+
+	return nil, nil
+	//return nil, fmt.Errorf("pods not found")
 }
 
 func (this *PodMap) ListByRsLabelsAndNS(ns string, rsLabels []map[string]string) ([]*corev1.Pod, error) {

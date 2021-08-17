@@ -10,6 +10,7 @@ type PodService struct {
 	PodMap        *PodMap        `inject:"-"`
 	CommonService *CommonService `inject:"-"`
 	RSMap         *RSMap         `inject:"-"`
+	EventMap      *EventMap      `inject:"-"`
 }
 
 func NewPodService() *PodService {
@@ -48,6 +49,8 @@ func (this *PodService) GetPodsListByNS(ns string) []*models.Pod {
 			NodeName:   pod.Spec.NodeName,
 			CreateTime: this.CommonService.TimeFormat(pod.CreationTimestamp.Time),
 			IPs:        []string{pod.Status.PodIP, pod.Status.HostIP},
+			IsReady:    this.CommonService.PosIsReady(pod),
+			Message:    this.EventMap.GetMessage(pod.Namespace, "Pod", pod.Name),
 		})
 	}
 	return ret

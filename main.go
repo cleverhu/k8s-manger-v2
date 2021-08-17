@@ -38,6 +38,7 @@ func main() {
 			controllers.NewUserCtl(),
 			controllers.NewWsCtl(),
 			controllers.NewNSCtl(),
+			controllers.NewIngressCtl(),
 		).
 		Attach(
 		//middlewares.NewCorsMiddleware()

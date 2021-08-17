@@ -14,10 +14,12 @@ var K8sClient *kubernetes.Clientset
 var k8sClientInitOnce sync.Once
 
 type K8sConfig struct {
-	DepHandler *services.DepHandler `inject:"-"`
-	PodHandler *services.PodHandler `inject:"-"`
-	RSHandler  *services.RSHandler  `inject:"-"`
-	NSHandler  *services.NSHandler  `inject:"-"`
+	DepHandler     *services.DepHandler     `inject:"-"`
+	PodHandler     *services.PodHandler     `inject:"-"`
+	RSHandler      *services.RSHandler      `inject:"-"`
+	NSHandler      *services.NSHandler      `inject:"-"`
+	EventHandler   *services.EventHandler   `inject:"-"`
+	IngressHandler *services.IngressHandler `inject:"-"`
 }
 
 func NewK8sConfig() *K8sConfig {
@@ -50,6 +52,12 @@ func (this *K8sConfig) Informer() informers.SharedInformerFactory {
 
 	nsInformer := factory.Core().V1().Namespaces().Informer()
 	nsInformer.AddEventHandler(this.NSHandler)
+
+	eventInformer := factory.Core().V1().Events().Informer()
+	eventInformer.AddEventHandler(this.EventHandler)
+
+	ingressInformer := factory.Networking().V1beta1().Ingresses().Informer()
+	ingressInformer.AddEventHandler(this.IngressHandler)
 
 	factory.Start(wait.NeverStop)
 	return factory

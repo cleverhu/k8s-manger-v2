@@ -26,3 +26,11 @@ func (*K8sHandlers) RSHandler() *services.RSHandler {
 func (*K8sHandlers) NSHandler() *services.NSHandler {
 	return &services.NSHandler{}
 }
+
+func (*K8sHandlers) EventHandler() *services.EventHandler {
+	return &services.EventHandler{}
+}
+
+func (*K8sHandlers) IngressHandler() *services.IngressHandler {
+	return &services.IngressHandler{}
+}

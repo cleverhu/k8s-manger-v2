@@ -13,6 +13,7 @@ type DeploymentMap struct {
 }
 
 func (this *DeploymentMap) Add(deploy *v1.Deployment) {
+
 	key := deploy.Namespace
 	if value, ok := this.data.Load(key); ok {
 		value = append(value.([]*v1.Deployment), deploy)
@@ -54,6 +55,8 @@ func (this *DeploymentMap) ListByNS(ns string) ([]*v1.Deployment, error) {
 	if ns != "all-namespaces" {
 		if list, ok := this.data.Load(ns); ok {
 			return list.([]*v1.Deployment), nil
+		} else {
+			return nil, nil
 		}
 	} else {
 		ret := make([]*v1.Deployment, 0)

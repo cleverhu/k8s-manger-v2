@@ -16,7 +16,7 @@ func (this *DepHandler) OnAdd(obj interface{}) {
 	dep := obj.(*v1.Deployment)
 	//fmt.Println(dep.Namespace)
 	this.DepMap.Add(dep)
-	wscore.ClientMap.SendAllDepList("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
+	wscore.ClientMap.SendAll("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
 }
 
 func (this *DepHandler) OnUpdate(oldObj interface{}, newObj interface{}) {
@@ -26,12 +26,12 @@ func (this *DepHandler) OnUpdate(oldObj interface{}, newObj interface{}) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		wscore.ClientMap.SendAllDepList("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
+		wscore.ClientMap.SendAll("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
 	}
 }
 
 func (this *DepHandler) OnDelete(obj interface{}) {
 	dep := obj.(*v1.Deployment)
 	this.DepMap.Delete(obj.(*v1.Deployment))
-	wscore.ClientMap.SendAllDepList("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
+	wscore.ClientMap.SendAll("Deployments", dep.Namespace, this.DepService.ListAll(dep.Namespace))
 }

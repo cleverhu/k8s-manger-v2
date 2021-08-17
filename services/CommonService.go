@@ -39,3 +39,22 @@ func (this *CommonService) IsValidLabel(m1, m2 map[string]string) bool {
 
 	return true
 }
+
+func (*CommonService) PosIsReady(pod *corev1.Pod) bool {
+	if pod.Status.Phase != "Running" {
+		return false
+	}
+	for _, condition := range pod.Status.Conditions {
+		if condition.Status != "True" {
+			return false
+		}
+	}
+	for _, rg := range pod.Spec.ReadinessGates {
+		for _, condition := range pod.Status.Conditions {
+			if condition.Type == rg.ConditionType && condition.Status != "True" {
+				return false
+			}
+		}
+	}
+	return true
+}

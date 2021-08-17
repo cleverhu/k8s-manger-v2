@@ -18,7 +18,7 @@ func NewPodCtl() *PodCtl {
 }
 
 func (*PodCtl) Name() string {
-	return "DeploymentCtl"
+	return "PodCtl"
 }
 
 func (this *PodCtl) ListAll(c *gin.Context) goft.Json {
@@ -28,7 +28,6 @@ func (this *PodCtl) ListAll(c *gin.Context) goft.Json {
 	}
 	return gin.H{"code": 20000, "data": gin.H{"ns": ns,
 		"data": this.PodService.GetPodsListByNS(ns)}}
-
 	//return gin.H{
 	//	"code": 20000,
 	//	"data": this.PodService.GetPodsListByNS(c.DefaultQuery("namespace", "default")),

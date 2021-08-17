@@ -24,3 +24,7 @@ func (*ServiceConfig) PodService() *services.PodService {
 func (*ServiceConfig) NSService() *services.NSService {
 	return services.NewNSService()
 }
+
+func (*ServiceConfig) IngressService() *services.IngressService {
+	return services.NewIngressService()
+}
