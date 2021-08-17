@@ -21,8 +21,12 @@ func (*DeploymentCtl) Name() string {
 }
 
 func (this *DeploymentCtl) ListAll(c *gin.Context) goft.Json {
-	//return "hello"
-	return gin.H{"code": 20000, "data": this.DepService.ListAll(c.Query("namespace"))}
+	ns := c.Query("namespace")
+	if ns == "undefined" || ns == "" {
+		ns = "all-namespaces"
+	}
+	return gin.H{"code": 20000, "data": gin.H{"ns": ns, "data": this.DepService.ListAll(ns)}}
+
 }
 
 func (this *DeploymentCtl) Detail(c *gin.Context) goft.Json {

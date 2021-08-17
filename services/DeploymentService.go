@@ -18,6 +18,7 @@ func NewDeploymentService() *DeploymentService {
 
 func (this *DeploymentService) ListAll(namespace string) []*models.Deployment {
 	ret := make([]*models.Deployment, 0)
+
 	deps, err := this.DepMap.ListByNS(namespace)
 	goft.Error(err)
 	for _, dep := range deps {

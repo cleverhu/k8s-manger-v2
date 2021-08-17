@@ -31,7 +31,7 @@ func (this *ClientMapStruct) Store(conn *websocket.Conn) {
 func (this *ClientMapStruct) SendAllDepList(t, ns string, data interface{}) {
 	this.data.Range(func(key, value interface{}) bool {
 		c := value.(*WsClient).conn
-		err := c.WriteJSON(gin.H{"type": t, "result": gin.H{"ns": ns, "data": data}})
+		err := c.WriteJSON(gin.H{"type": t, "data": gin.H{"ns": ns, "data": data}})
 		if err != nil {
 			this.Remove(c)
 			log.Println(err)

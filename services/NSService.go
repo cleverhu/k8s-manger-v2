@@ -10,7 +10,6 @@ func NewNSService() *NSService {
 
 func (this *NSService) ListAll() []string {
 	ret := make([]string, 0)
-	//fmt.Println(this.NSMap)
 	this.NSMap.data.Range(func(key, value interface{}) bool {
 		ret = append(ret, key.(string))
 		return true

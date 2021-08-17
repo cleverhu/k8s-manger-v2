@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	corev1 "k8s.io/api/core/v1"
+	"sort"
 	"sync"
 )
 
@@ -55,6 +56,22 @@ func (this *PodMap) ListByNS(ns string) ([]*corev1.Pod, error) {
 		if list, ok := this.data.Load(ns); ok {
 			return list.([]*corev1.Pod), nil
 		}
+	} else {
+		ret := make([]*corev1.Pod, 0)
+		this.data.Range(func(key, value interface{}) bool {
+			for _, dep := range value.([]*corev1.Pod) {
+				ret = append(ret, dep)
+			}
+			sort.Slice(ret, func(i, j int) bool {
+				if ret[i].Namespace == ret[j].Namespace {
+					return ret[i].Name < ret[j].Name
+				} else {
+					return ret[i].Namespace < ret[j].Namespace
+				}
+			})
+			return true
+		})
+		return ret, nil
 	}
 	return nil, fmt.Errorf("pods not found")
 }

@@ -13,8 +13,8 @@ type PodCtl struct {
 	PodService *services.PodService        `inject:"-"`
 }
 
-func NewPodCtl() *DeploymentCtl {
-	return &DeploymentCtl{}
+func NewPodCtl() *PodCtl {
+	return &PodCtl{}
 }
 
 func (*PodCtl) Name() string {
@@ -22,7 +22,17 @@ func (*PodCtl) Name() string {
 }
 
 func (this *PodCtl) ListAll(c *gin.Context) goft.Json {
-	return ""
+	ns := c.Query("namespace")
+	if ns == "undefined" || ns == "" {
+		ns = "all-namespaces"
+	}
+	return gin.H{"code": 20000, "data": gin.H{"ns": ns,
+		"data": this.PodService.GetPodsListByNS(ns)}}
+
+	//return gin.H{
+	//	"code": 20000,
+	//	"data": this.PodService.GetPodsListByNS(c.DefaultQuery("namespace", "default")),
+	//}
 }
 
 func (this *PodCtl) Build(goft *goft.Goft) {

@@ -34,11 +34,10 @@ func main() {
 		).
 		Mount("v1",
 			controllers.NewDeploymentCtl(),
-			controllers.NewNSCtl(),
-		).
-		Mount("",
+			controllers.NewPodCtl(),
 			controllers.NewUserCtl(),
 			controllers.NewWsCtl(),
+			controllers.NewNSCtl(),
 		).
 		Attach(
 		//middlewares.NewCorsMiddleware()

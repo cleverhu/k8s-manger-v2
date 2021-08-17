@@ -51,7 +51,7 @@ func (this *DeploymentMap) Update(deploy *v1.Deployment) error {
 }
 
 func (this *DeploymentMap) ListByNS(ns string) ([]*v1.Deployment, error) {
-	if ns != "" {
+	if ns != "all-namespaces" {
 		if list, ok := this.data.Load(ns); ok {
 			return list.([]*v1.Deployment), nil
 		}
