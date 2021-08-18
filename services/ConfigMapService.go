@@ -39,7 +39,13 @@ func (this *ConfigMapService) PostConfigMap(postModel *models.PostConfigMapModel
 			Namespace: postModel.NameSpace},
 		Data: postModel.Data,
 	}
-	_, err := this.Client.CoreV1().ConfigMaps(postModel.NameSpace).Create(context.Background(), cm, v1.CreateOptions{})
+	var err error
+	if postModel.IsUpdate {
+		_, err = this.Client.CoreV1().ConfigMaps(postModel.NameSpace).Update(context.Background(), cm, v1.UpdateOptions{})
+
+	} else {
+		_, err = this.Client.CoreV1().ConfigMaps(postModel.NameSpace).Create(context.Background(), cm, v1.CreateOptions{})
+	}
 	return err
 }
 

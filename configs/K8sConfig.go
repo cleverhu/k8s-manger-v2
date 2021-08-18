@@ -7,11 +7,9 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"log"
-	"sync"
 )
 
 var K8sClient *kubernetes.Clientset
-var k8sClientInitOnce sync.Once
 
 type K8sConfig struct {
 	DepHandler       *services.DepHandler       `inject:"-"`
@@ -25,20 +23,24 @@ type K8sConfig struct {
 	ConfigMapHandler *services.ConfigMapHandler `inject:"-"`
 }
 
+func init() {
+	K8sClient = initK8sClient()
+}
+
+func initK8sClient() *kubernetes.Clientset {
+	config := &rest.Config{Host: "http://47.101.175.193:8009"}
+	clientSet, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return clientSet
+}
+
 func NewK8sConfig() *K8sConfig {
 	return &K8sConfig{}
 }
 
 func (this *K8sConfig) K8sClient() *kubernetes.Clientset {
-	k8sClientInitOnce.Do(func() {
-		config := &rest.Config{Host: "http://47.101.175.193:8009"}
-		clientSet, err := kubernetes.NewForConfig(config)
-		if err != nil {
-			log.Fatal(err)
-		}
-		K8sClient = clientSet
-	})
-
 	return K8sClient
 }
 

@@ -11,4 +11,5 @@ type PostConfigMapModel struct {
 	Name      string
 	NameSpace string
 	Data      map[string]string
+	IsUpdate  bool
 }
