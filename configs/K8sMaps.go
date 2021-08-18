@@ -38,3 +38,11 @@ func (*K8sMaps) IngressMap() *services.IngressMap {
 func (*K8sMaps) ServiceMap() *services.ServiceMap {
 	return &services.ServiceMap{}
 }
+
+func (*K8sMaps) SecretMap() *services.SecretMap {
+	return &services.SecretMap{}
+}
+
+func (*K8sMaps) ConfigMapMap() *services.ConfigMapMap {
+	return &services.ConfigMapMap{}
+}

@@ -36,7 +36,6 @@ func (this *CommonService) IsValidLabel(m1, m2 map[string]string) bool {
 			return false
 		}
 	}
-
 	return true
 }
 

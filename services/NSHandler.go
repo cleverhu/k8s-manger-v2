@@ -6,12 +6,14 @@ import (
 )
 
 type NSHandler struct {
-	NSMap *NSMap `inject:"-"`
+	NSMap     *NSMap     `inject:"-"`
+	NSService *NSService `inject:"-"`
 }
 
 func (this *NSHandler) OnAdd(obj interface{}) {
 	this.NSMap.Add(obj.(*corev1.Namespace))
 	//fmt.Println(obj.(*corev1.Namespace))
+
 }
 func (this *NSHandler) OnUpdate(oldObj interface{}, newObj interface{}) {
 	//fmt.Println(newObj.(*corev1.Namespace))

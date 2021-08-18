@@ -14,13 +14,15 @@ var K8sClient *kubernetes.Clientset
 var k8sClientInitOnce sync.Once
 
 type K8sConfig struct {
-	DepHandler     *services.DepHandler     `inject:"-"`
-	PodHandler     *services.PodHandler     `inject:"-"`
-	RSHandler      *services.RSHandler      `inject:"-"`
-	NSHandler      *services.NSHandler      `inject:"-"`
-	EventHandler   *services.EventHandler   `inject:"-"`
-	IngressHandler *services.IngressHandler `inject:"-"`
-	ServiceHandler *services.ServiceHandler `inject:"-"`
+	DepHandler       *services.DepHandler       `inject:"-"`
+	PodHandler       *services.PodHandler       `inject:"-"`
+	RSHandler        *services.RSHandler        `inject:"-"`
+	NSHandler        *services.NSHandler        `inject:"-"`
+	EventHandler     *services.EventHandler     `inject:"-"`
+	IngressHandler   *services.IngressHandler   `inject:"-"`
+	ServiceHandler   *services.ServiceHandler   `inject:"-"`
+	SecretHandler    *services.SecretHandler    `inject:"-"`
+	ConfigMapHandler *services.ConfigMapHandler `inject:"-"`
 }
 
 func NewK8sConfig() *K8sConfig {
@@ -62,6 +64,12 @@ func (this *K8sConfig) Informer() informers.SharedInformerFactory {
 
 	serviceInformer := factory.Core().V1().Services().Informer()
 	serviceInformer.AddEventHandler(this.ServiceHandler)
+
+	secretsInformer := factory.Core().V1().Secrets().Informer()
+	secretsInformer.AddEventHandler(this.SecretHandler)
+
+	configMapsInformer := factory.Core().V1().ConfigMaps().Informer()
+	configMapsInformer.AddEventHandler(this.ConfigMapHandler)
 
 	factory.Start(wait.NeverStop)
 	return factory

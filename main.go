@@ -33,13 +33,15 @@ func main() {
 			configs.NewServiceConfig(),
 		).
 		Mount("v1",
+			controllers.NewUserCtl(),
 			controllers.NewDeploymentCtl(),
 			controllers.NewPodCtl(),
-			controllers.NewUserCtl(),
 			controllers.NewWsCtl(),
 			controllers.NewNSCtl(),
 			controllers.NewIngressCtl(),
 			controllers.NewServiceCtl(),
+			controllers.NewSecretCtl(),
+			controllers.NewConfigMapCtl(),
 		).
 		Attach(
 		//middlewares.NewCorsMiddleware()
