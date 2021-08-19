@@ -5,11 +5,13 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"log"
 )
 
 var K8sClient *kubernetes.Clientset
+var K8sCfg *rest.Config
 
 type K8sConfig struct {
 	DepHandler       *services.DepHandler       `inject:"-"`
@@ -32,6 +34,7 @@ func initK8sClient() *kubernetes.Clientset {
 	if err != nil {
 		log.Fatal(err)
 	}
+	K8sCfg = cfg
 	cfg.Insecure = true
 	client, err := kubernetes.NewForConfig(cfg)
 	if err != nil {
@@ -46,6 +49,10 @@ func NewK8sConfig() *K8sConfig {
 
 func (this *K8sConfig) K8sClient() *kubernetes.Clientset {
 	return K8sClient
+}
+
+func (this *K8sConfig) K8sCfg() *rest.Config {
+	return K8sCfg
 }
 
 func (this *K8sConfig) Informer() informers.SharedInformerFactory {
