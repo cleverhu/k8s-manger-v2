@@ -5,7 +5,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 	"log"
 )
 
@@ -28,12 +28,16 @@ func init() {
 }
 
 func initK8sClient() *kubernetes.Clientset {
-	config := &rest.Config{Host: "http://47.101.175.193:8009"}
-	clientSet, err := kubernetes.NewForConfig(config)
+	cfg, err := clientcmd.BuildConfigFromFlags("", "config")
 	if err != nil {
 		log.Fatal(err)
 	}
-	return clientSet
+	cfg.Insecure = true
+	client, err := kubernetes.NewForConfig(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return client
 }
 
 func NewK8sConfig() *K8sConfig {
