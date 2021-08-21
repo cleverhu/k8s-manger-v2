@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: k8s-manger
+  name: k8s-manger-deolpyment
+spec:
+  selector:
+    matchLabels:
+      app: k8s-manger
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-manger
+    spec:
+      containers:
+        - name: backend
+          image: deeplythink/k8s-manger-backend:v1.01
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+        - name: froentend
+          image: deeplythink/k8s-manger-frontend:v1.02
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-manger-svc
+  namespace: k8s-manger
+spec:
+  type: ClusterIP
+  ports:
+    - name: backend
+      port: 8080
+      targetPort: 8080
+    - name: forontend
+      port: 80
+      targetPort: 80
+  selector:
+    app: k8s-manger
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubectl.kubernetes.io/server-snipet: |
+      if ($request_method = 'OPTIONS') {
+        add_header 'Access-Control-Max-Age' 1728008;
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Allow-Headers' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET,POST,PUT,DELETE,PATCH,OPTIONS';
+        return 204;
+       }
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-User, X-Token
+    nginx.ingress.kubernetes.io/cors-allow-methods: GET,POST,PUT,DELETE,PATCH,OPTIONS
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 300m
+  name: k8s-manger-ingress
+  namespace: k8s-manger
+spec:
+  rules:
+    - host: k8s.deeplythink.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: k8s-manger-svc
+              servicePort: 80
+    - host: k8s-backend.deeplythink.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: k8s-manger-svc
+              servicePort: 8080

@@ -31,7 +31,7 @@ func main() {
 			return
 		}
 		shellClient := wscore.NewWsShellClient(wsClient)
-		err = helpers.HandleCommand(client, cfg, []string{"sh"}).
+		err = helpers.HandleCommand("default", "", "", client, cfg, []string{"sh"}).
 			Stream(remotecommand.StreamOptions{
 				Stdin:  shellClient,
 				Stdout: shellClient,

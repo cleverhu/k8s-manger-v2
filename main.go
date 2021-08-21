@@ -46,8 +46,8 @@ func main() {
 		Attach(
 		//middlewares.NewCorsMiddleware()
 		)
-	server.GET("/dashboard/*filepath", func(c *gin.Context) {
-		http.FileServer(FS(false)).ServeHTTP(c.Writer, c.Request)
-	})
+	//server.GET("/dashboard/*filepath", func(c *gin.Context) {
+	//	http.FileServer(FS(false)).ServeHTTP(c.Writer, c.Request)
+	//})
 	server.Launch()
 }
