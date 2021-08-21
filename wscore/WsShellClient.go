@@ -13,6 +13,7 @@ func NewWsShellClient(client *websocket.Conn) *WsShellClient {
 	return &WsShellClient{client: client}
 }
 func (this *WsShellClient) Write(p []byte) (n int, err error) {
+	fmt.Println(string(p))
 	err = this.client.WriteMessage(websocket.TextMessage, p)
 	if err != nil {
 		return 0, err
@@ -25,5 +26,5 @@ func (this *WsShellClient) Read(p []byte) (n int, err error) {
 	if err != nil {
 		return 0, err
 	}
-	return copy(p, string(b)+"\n"), nil
+	return copy(p, string(b)), nil
 }

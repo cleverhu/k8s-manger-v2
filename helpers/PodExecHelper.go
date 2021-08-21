@@ -8,9 +8,9 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 )
 
-func HandleCommand(client *kubernetes.Clientset, config *rest.Config, command []string) remotecommand.Executor {
+func HandleCommand(ns, podName, containerName string, client *kubernetes.Clientset, config *rest.Config, command []string) remotecommand.Executor {
 	option := &v1.PodExecOptions{
-		Container: "",
+		Container: containerName,
 		Command:   command,
 		Stdin:     true,
 		Stdout:    true,
@@ -18,8 +18,8 @@ func HandleCommand(client *kubernetes.Clientset, config *rest.Config, command []
 		TTY:       true,
 	}
 	req := client.CoreV1().RESTClient().Post().Resource("pods").
-		Namespace("default").
-		Name("ngx1-7885b5dc9d-jxzrr").
+		Namespace(ns).
+		Name(podName).
 		SubResource("exec").
 		Param("color", "false").
 		VersionedParams(

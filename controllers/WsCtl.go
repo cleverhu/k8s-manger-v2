@@ -34,12 +34,16 @@ func (this *WsCtl) Connect(c *gin.Context) string {
 }
 
 func (this *WsCtl) PodConnect(c *gin.Context) (v goft.Void) {
+	ns := c.Query("ns")
+	podName := c.Query("podName")
+	containerName := c.Query("cName")
+
 	wsClient, err := wscore.Upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		return
 	}
 	shellClient := wscore.NewWsShellClient(wsClient)
-	err = helpers.HandleCommand(this.Client, this.Config, []string{"sh"}).
+	err = helpers.HandleCommand(ns, podName, containerName, this.Client, this.Config, []string{"sh"}).
 		Stream(remotecommand.StreamOptions{
 			Stdin:  shellClient,
 			Stdout: shellClient,
@@ -51,7 +55,7 @@ func (this *WsCtl) PodConnect(c *gin.Context) (v goft.Void) {
 
 func (this *WsCtl) Build(goft *goft.Goft) {
 	goft.Handle("GET", "/ws", this.Connect).
-		Handle("GET", "/podws", this.Connect)
+		Handle("GET", "/podws", this.PodConnect)
 }
 func (this *WsCtl) Name() string {
 	return "WsCtl"

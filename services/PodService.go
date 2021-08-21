@@ -55,3 +55,19 @@ func (this *PodService) GetPodsListByNS(ns string) []*models.Pod {
 	}
 	return ret
 }
+
+func (this *PodService) GetContainers(ns, podName string) []string {
+
+	pods, err := this.PodMap.ListByNS(ns)
+	goft.Error(err)
+	ret := make([]string, 0)
+	for _, pod := range pods {
+		if pod.Name == podName {
+			containers := pod.Spec.Containers
+			for _, c := range containers {
+				ret = append(ret, c.Name)
+			}
+		}
+	}
+	return ret
+}
