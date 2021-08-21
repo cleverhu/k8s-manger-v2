@@ -1,1 +1,1 @@
-esc -o static.go dashboard && go run main.go static.go
+go run main.go static.go
